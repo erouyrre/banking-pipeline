@@ -42,8 +42,8 @@ def check_duplicates(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     df.loc[mask, "transaction_id"] = [str(uuid4()) for _ in range(len(df[mask]))]
 
     CONTENT_COLS = ["emetteur_id", "destinataire_id", "montant", "timestamp"]
-    df_invalid = df[df.duplicated(subset=CONTENT_COLS, keep=False)]
-    df_valid = df[~df.duplicated(subset=CONTENT_COLS, keep=False)]
+    df_invalid = df[df.duplicated(subset=CONTENT_COLS, keep="first")]
+    df_valid = df[~df.duplicated(subset=CONTENT_COLS, keep="first")]
     return df_valid, df_invalid
 
 
