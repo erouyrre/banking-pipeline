@@ -7,8 +7,12 @@ __author__ = "Ernest Rouyrre"
 
 
 import pandas as pd
+from utils.helpers import get_logger
 from pathlib import Path
 from uuid import uuid4
+
+
+logger = get_logger(__name__)
 
 
 def load_bronze() -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -112,7 +116,11 @@ def save_to_silver(df: pd.DataFrame, quarantines: dict[str, pd.DataFrame]):
         value.to_parquet(QUARANTINES_FILE, index=False)
 
 
-if __name__ == "__main__":
+def main():
     df_clients, df_transactions = load_bronze()
     df_valid, quarantines = validate_transactions(df_transactions, df_clients)
     save_to_silver(df_valid, quarantines)
+
+
+if __name__ == "__main__":
+    main()

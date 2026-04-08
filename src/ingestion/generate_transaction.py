@@ -110,7 +110,11 @@ def save_to_bronze(clients: list[dict], transactions: list[dict]):
     df_transactions.to_parquet(TRANSACTIONS_FILE, index=False)
 
 
-if __name__ == "__main__":
+def main():
     clients = generate_clients(1000)
     transactions = generate_transactions(10000, clients)
     save_to_bronze(clients, transactions)
+
+
+if __name__ == "__main__":
+    main()

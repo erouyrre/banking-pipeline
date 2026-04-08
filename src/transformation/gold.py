@@ -61,7 +61,7 @@ def save_to_gold(dict_df: dict[str, pd.DataFrame]):
         df.to_parquet(GOLD_FILE, index=False)
 
 
-if __name__ == "__main__":
+def main():
     df_transactions = load_silver()
     dict_df = {
         "avg_transaction_per_client": compute_avg_transaction_per_client(df_transactions),
@@ -69,3 +69,7 @@ if __name__ == "__main__":
         "total_received_per_client": compute_total_received_per_client(df_transactions),
     }
     save_to_gold(dict_df)
+
+
+if __name__ == "__main__":
+    main()

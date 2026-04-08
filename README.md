@@ -2,6 +2,10 @@
 
 A data pipeline for processing banking transactions and generating fraud analytics. This project implements a **medallion architecture** (Bronze → Silver → Gold) to ensure data quality and produce meaningful business insights from transaction data.
 
+## 🏦 Business Context
+
+Banks process millions of transactions daily, generating vast amounts of data that can be leveraged for business value. Use cases include fraud detection, regular reporting, and customer segmentation. This pipeline simulates the real-world data pipeline of a bank, extracting insights from transaction data to inform business decisions.
+
 ## 📋 Table of Contents
 
 - [Overview](#overview)
@@ -24,6 +28,20 @@ This pipeline processes banking transaction and client data through three stages
 3. **Aggregation**: Compute analytical metrics (Gold layer)
 
 It handles realistic data quality issues and produces fraud detection metrics for banking institutions.
+
+## 🔍 Technical Choices
+
+- **Parquet** : chosen over CSV because of its
+  - columnar storage format, which allows for efficient
+    compression and querying of large datasets
+  - ability to store and query large datasets in a distributed
+    manner, making it suitable for big data analytics
+  - support for data types such as nested records and arrays,
+    which are commonly found in JSON and Avro data
+  - performance benefits due to its ability to read and write data
+    in a streaming fashion, reducing memory overhead
+- **Medallion Architecture** : ensures immutability of raw data by separating data processing into distinct layers, each with its own set of rules and responsibilities, allowing for easier maintenance and debugging.
+- **Fail-fast validation** : justified so that data quality issues are detected early and can be addressed before further processing.
 
 ## Architecture
 
