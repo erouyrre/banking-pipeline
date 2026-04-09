@@ -7,7 +7,7 @@ __author__ = "Ernest Rouyrre"
 
 
 import pandas as pd
-from utils.helpers import get_logger
+from src.utils.helpers import get_logger
 from pathlib import Path
 from uuid import uuid4
 

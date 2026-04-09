@@ -33,7 +33,7 @@ from faker import Faker
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from utils.helpers import get_logger
+from src.utils.helpers import get_logger
 
 
 logger = get_logger(__name__)

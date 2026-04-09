@@ -12,7 +12,7 @@ __author__ = "Ernest Rouyrre"
 
 import pandas as pd
 from pathlib import Path
-from utils.helpers import get_logger
+from src.utils.helpers import get_logger
 import duckdb
 
 
