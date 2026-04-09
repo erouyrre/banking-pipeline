@@ -110,6 +110,14 @@ banking-pipeline/
 
 The pipeline is orchestrated using Prefect, a Python library for building robust, efficient, and adaptive data pipelines. Prefect provides a simple API for defining tasks, flows, and storage, allowing for easy integration with existing data processing tools. By using Prefect, the pipeline can be easily scaled, modified, and executed in a variety of environments.
 
+## Scalability
+This pipeline is designed for moderate data volumes.
+For production-scale data (100M+ transactions), the following
+improvements would be considered:
+- **Apache Spark** : replace Pandas with PySpark for distributed processing
+- **Chunked processing** : process data in batches with PyArrow
+- **Parquet partitioning** : partition data by date for faster queries
+
 ## Installation
 
 ### Prerequisites
