@@ -23,8 +23,14 @@ def load_bronze() -> tuple[pd.DataFrame, pd.DataFrame]:
     BRONZE_FOLDER = CURRENT_DIR.parent.parent.joinpath("data", "bronze")
     CLIENTS_FILE = BRONZE_FOLDER.joinpath("clients.parquet")
     TRANSACTIONS_FILE = BRONZE_FOLDER.joinpath("transactions.parquet")
+
+    logger.info(f"Loading clients from {CLIENTS_FILE}...")
     df_clients = pd.read_parquet(CLIENTS_FILE)
+
+    logger.info(f"Loading transactions from {TRANSACTIONS_FILE}...")
     df_transactions = pd.read_parquet(TRANSACTIONS_FILE)
+
+    logger.info(f"Loaded {len(df_clients)} clients and {len(df_transactions)} transactions")
     return df_clients, df_transactions
 
 
@@ -87,14 +93,40 @@ def validate_transactions(
     We treat in fail-fast mode.
     '''
     quarantines = {}
+
+    logger.info("Validating transactions...")
+    logger.info("Checking negative montant...")
     df_valid, df_invalid = check_negative_montant(df)
     quarantines["negative_montant"] = df_invalid
+    if len(df_invalid) > 0:
+        logger.warning(f"{len(df_invalid)} transactions quarantined: negative amounts")
+    else:
+        logger.info("No negative montant found")
+
+    logger.info("Checking duplicates...")
     df_valid, df_invalid = check_duplicates(df_valid)
     quarantines["duplicated"] = df_invalid
+    if len(df_invalid) > 0:
+        logger.warning(f"{len(df_invalid)} transactions quarantined: duplicates")
+    else:
+        logger.info("No duplicates found")
+
+    logger.info("Checking future timestamp...")
     df_valid, df_invalid = check_future_timestamp(df_valid)
     quarantines["future_timestamp"] = df_invalid
+    if len(df_invalid) > 0:
+        logger.warning(f"{len(df_invalid)} transactions quarantined: future timestamps")
+    else:
+        logger.info("No future timestamps found")
+
+    logger.info("Checking unknown clients...")
     df_valid, df_invalid = check_unknown_clients(df_valid, df_clients)
     quarantines["unknown_clients"] = df_invalid
+    if len(df_invalid) > 0:
+        logger.warning(f"{len(df_invalid)} transactions quarantined: unknown clients")
+    else:
+        logger.info("No unknown clients found")
+
     return df_valid, quarantines
 
 
@@ -107,13 +139,20 @@ def save_to_silver(df: pd.DataFrame, quarantines: dict[str, pd.DataFrame]):
     SILVER_FOLDER = CURRENT_DIR.parent.parent.joinpath("data", "silver")
     SILVER_FOLDER.mkdir(parents=True, exist_ok=True)
     SILVER_FILE = SILVER_FOLDER.joinpath("transactions.parquet")
+
+    logger.info(f"Saving transactions to {SILVER_FILE}...")
     df.to_parquet(SILVER_FILE, index=False)
 
     QUARANTINES_FOLDER = CURRENT_DIR.parent.parent.joinpath("data", "quarantines")
     QUARANTINES_FOLDER.mkdir(parents=True, exist_ok=True)
+
+    logger.info(f"Saving quarantines to {QUARANTINES_FOLDER}...")
     for key, value in quarantines.items():
         QUARANTINES_FILE = QUARANTINES_FOLDER.joinpath(f"{key}.parquet")
+        logger.info(f"Saving {key} to {QUARANTINES_FILE}...")
         value.to_parquet(QUARANTINES_FILE, index=False)
+    
+    logger.info("Done.")
 
 
 def main():

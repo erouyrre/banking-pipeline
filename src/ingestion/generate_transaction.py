@@ -33,6 +33,10 @@ from faker import Faker
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
+from utils.helpers import get_logger
+
+
+logger = get_logger(__name__)
 
 
 fake = Faker()
@@ -52,6 +56,7 @@ def generate_clients(n: int) -> list[dict]:
     Generate a list of clients with random data.
     '''
     list_clients = []
+    logger.info(f"Generating {n} clients...")
     for _ in range(n):
         client = {
             "client_id": str(uuid.uuid4()),
@@ -61,6 +66,7 @@ def generate_clients(n: int) -> list[dict]:
             "account_balance": random.uniform(0, 2000),
         }
         list_clients.append(client)
+    logger.info(f"Generated {len(list_clients)} clients")
     return list_clients
     
 def get_different_client(clients, emetteur_id):
@@ -77,6 +83,7 @@ def generate_transactions(n: int, clients: list[dict]) -> list[dict]:
     Generate a list of transactions with random data.
     '''
     list_transactions = []
+    logger.info(f"Generating {n} transactions...")
     for _ in range(n):
         emeteur_id = random.choice(clients)["client_id"]
         destinataire_id = get_different_client(clients, emeteur_id)
@@ -93,6 +100,7 @@ def generate_transactions(n: int, clients: list[dict]) -> list[dict]:
             "montant": random.uniform(0, 10000) if is_fraud else random.uniform(0, 1000)
         }
         list_transactions.append(transaction)
+    logger.info(f"Generated {len(list_transactions)} transactions")
     return list_transactions
 
 def save_to_bronze(clients: list[dict], transactions: list[dict]):
@@ -106,7 +114,11 @@ def save_to_bronze(clients: list[dict], transactions: list[dict]):
     TRANSACTIONS_FILE = SAVE_FOLDER.joinpath("transactions.parquet")
     df_clients = pd.DataFrame(clients)
     df_transactions = pd.DataFrame(transactions)
+
+    logger.info(f"Saving clients to {CLIENTS_FILE}...")
     df_clients.to_parquet(CLIENTS_FILE, index=False)
+
+    logger.info(f"Saving transactions to {TRANSACTIONS_FILE}...")
     df_transactions.to_parquet(TRANSACTIONS_FILE, index=False)
 
 
