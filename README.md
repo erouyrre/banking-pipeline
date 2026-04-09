@@ -29,7 +29,7 @@ This pipeline processes banking transaction and client data through three stages
 
 It handles realistic data quality issues and produces fraud detection metrics for banking institutions.
 
-## 🔍 Technical Choices
+## Technical Choices
 
 - **Parquet** : chosen over CSV because of its
   - columnar storage format, which allows for efficient
@@ -68,6 +68,9 @@ The project follows the **Medallion Data Architecture** pattern:
   - **Average transaction per client**: Mean transaction amount by sender
   - **Fraud rate per client**: Proportion of fraudulent transactions by sender
   - **Total received per client**: Sum of received amounts by recipient
+- **Two Gold scripts available**:
+  - One using SQL queries (gold_sql.py) for aggregating data
+  - Another using Pandas DataFrames (gold.py) for aggregating data
 
 ## Project Structure
 
@@ -102,6 +105,10 @@ banking-pipeline/
 └── tests/
     └── test_silver.py                # Unit tests for silver transformation
 ```
+
+## Orchestration
+
+The pipeline is orchestrated using Prefect, a Python library for building robust, efficient, and adaptive data pipelines. Prefect provides a simple API for defining tasks, flows, and storage, allowing for easy integration with existing data processing tools. By using Prefect, the pipeline can be easily scaled, modified, and executed in a variety of environments.
 
 ## Installation
 
