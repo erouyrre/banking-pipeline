@@ -77,7 +77,7 @@ The project follows the **Medallion Data Architecture** pattern:
 ```
 banking-pipeline/
 ├── main.py                          # Main orchestrator script
-├── requirement.txt                   # List of dependencies
+├── requirements.txt                   # List of dependencies
 ├── README.md                         # This file
 ├── LICENSE                           # Project license
 ├── config/                           # Configuration files
