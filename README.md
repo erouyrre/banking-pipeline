@@ -95,7 +95,8 @@ banking-pipeline/
 │   │   └── generate_transaction.py   # Data generation
 │   ├── transformation/
 │   │   ├── silver.py                 # Silver layer logic
-│   │   └── gold.py                   # Gold layer logic
+|   |   ├── gold.py                   # Gold layer logic
+│   │   └── gold_sql.py               # SQL based gold layer 
 │   └── utils/
 │       └── helpers.py                # Utility functions
 └── tests/
@@ -132,6 +133,7 @@ pip install -r requirements.txt
 - **faker**: Generate synthetic data
 - **pytest**: Unit testing framework
 - **pyarrow**: Parquet file support
+- **prefect**: Workflow management library
 
 ## Usage
 
